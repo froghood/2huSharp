@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace></RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Touhou.Graphics\Events.cs" />
+    <Compile Remove="Touhou.IO\Controller.cs" />
+    <Compile Remove="Touhou\TouhouSharp.cs" />
+    <Compile Remove="Unused\Delegates.cs" />
+    <Compile Remove="Unused\Events.cs" />
+    <Compile Remove="Unused\Input.cs" />
+    <Compile Remove="Unused\Renderer.cs" />
+    <Compile Remove="Unused\Text.cs" />
+    <Compile Remove="Unused\TouhouSharp.cs" />
+    <Compile Remove="Unused\Util.cs" />
+    <Compile Remove="Unused\Vector.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="bin\Debug\net5.0\assets\fonts\arial.ttf" />
+    <Content Include="bin\Debug\net5.0\assets\fonts\HanaMinA.ttf" />
+    <Content Include="bin\Debug\net5.0\assets\fonts\KoPubBatangMedium.ttf" />
+    <Content Include="bin\Debug\net5.0\assets\textures\Reimu.png" />
+    <Content Include="bin\Debug\net5.0\assets\fonts\simsun.ttf" />
+    <Content Include="bin\Debug\net5.0\assets\textures\Reimu.json" />
+    <Content Include="bin\Debug\net5.0\assets\fonts\yumindb.ttf" />
+    <Content Include="bin\Debug\net5.0\config.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bin\Debug\net5.0\assets\textures\test-atlas.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="SFML.Net" Version="2.5.0" />
+    <PackageReference Include="SharpDX.XInput" Version="4.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Touhou.Utility\" />
+    <Folder Include="Unused\" />
+  </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
+
+</Project>
