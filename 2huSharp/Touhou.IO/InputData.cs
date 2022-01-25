@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using SFML.System;
 using SFML.Window;
 
+using SharpDX.XInput;
+
 namespace Touhou.IO {
 
 	// TODO: finish input, gamepad data
@@ -19,7 +21,9 @@ namespace Touhou.IO {
 		public Input.Action Action { get; init; }
 		public string Unicode { get; init; }	
 		public int User { get; init; }
-		public int Button { get; init; }
+		public Input.Button Button { get; init; }
+		public Input.JoystickDirection Direction { get; init; }
+		public Vector2f Vector { get; init; }
 
 		private readonly Keyboard.Key? _key;
 
@@ -27,17 +31,17 @@ namespace Touhou.IO {
 		//public JoystickDirection Direction { get; }
 		//public Vector2f Vector { get; }
 
-		//public override string ToString() {
-		//	return
-		//		$"Type: {Type} | " +
-		//		$"Action: {Action} | " +
-		//		$"Key: {Key} | " +
-		//		$"Unicode: {Unicode} | " +
-		//		$"User: {User} | " +
-		//		$"Button: {Button} | " +
-		//		$"Direction: {Direction} | " +
-		//		$"Vector: {Vector}";
-		//}
+		public override string ToString() {
+			return
+				$"Type: {Type} | " +
+				$"Action: {Action} | " +
+				$"Key: {Key} | " +
+				$"Unicode: {Unicode} | " +
+				$"User: {User} | " +
+				$"Button: {Button} | " +
+				$"Direction: {Direction} | " +
+				$"Vector: {Vector}";
+		}
 
 		//// key
 		//public InputData(Keyboard.Key key) : this() {

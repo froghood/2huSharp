@@ -63,7 +63,7 @@ namespace Touhou {
 					_commandBuffer.Dequeue().Invoke();
 				}
 
-				Window.DispatchEvents();
+				InputHandler.Poll();
 				SceneManager.Update(time, deltaTime);
 				SceneManager.Render(time, deltaTime);
 				Window.Clear();

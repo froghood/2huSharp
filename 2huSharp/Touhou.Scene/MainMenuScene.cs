@@ -28,11 +28,11 @@ namespace Touhou.Scene {
 			};
 
 			_baseMenuSelector.OnInputPressed += (InputData inputData) => {
-				//if (inputData.Type != Input.Type.Joystick) return;
-				//switch (inputData.Direction) {
-				//	case Input.JoystickDirection.South: _baseMenuSelector.Index++; break;
-				//	case Input.JoystickDirection.North: _baseMenuSelector.Index--; break;
-				//}
+				if (inputData.Type != Input.Type.Joystick) return;
+				switch (inputData.Direction) {
+					case Input.JoystickDirection.South: _baseMenuSelector.Index++; break;
+					case Input.JoystickDirection.North: _baseMenuSelector.Index--; break;
+				}
 			};
 
 			// create all menus
@@ -89,7 +89,7 @@ namespace Touhou.Scene {
 		public void InputPressed(InputData inputData) {
 			_baseMenuSelector.InputPressed(inputData);
 
-			Console.WriteLine(inputData.Action);
+			Console.WriteLine(inputData);
 		}
 
 		public void InputReleased(InputData inputData) {

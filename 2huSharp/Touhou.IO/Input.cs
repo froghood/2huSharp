@@ -31,5 +31,40 @@ namespace Touhou.IO {
 			Button,
 			Joystick,
 		}
+
+		public enum JoystickDirection {
+			Center,
+			East,
+			NorthEast,
+			North,
+			NorthWest,
+			West,
+			SouthWest,
+			South,
+			SouthEast
+		}
+
+		public enum JoystickMode {
+			Accurate,
+			Simple
+		}
+
+		public enum Button {
+			Unknown,
+			A,
+			B,
+			X,
+			Y,
+			LShoulder,
+			RShoulder,
+			Select,
+			Start,
+			LThumb,
+			RThumb,
+			Right,
+			Left,
+			Down,
+			Up
+		}
 	}
 }

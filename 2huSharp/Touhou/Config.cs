@@ -10,10 +10,11 @@ using SFML.System;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Linq;
+
+using Touhou.IO;
 
 namespace Touhou {
-	public class Config {
+	internal class Config {
 		public ConfigGraphics Graphics { get; set; }
 		public ConfigInput Input { get; set; }
 
@@ -75,13 +76,17 @@ namespace Touhou {
 			}
 
 			public class ConfigInputGamepad {
-				public int NonA;
-				public int NonB;
-				public int SpellA;
-				public int SpellB;
-				public int Focus;
-				public int Bomb;
-				public int Taunt;
+				public Input.Button Right;
+				public Input.Button Left;
+				public Input.Button Down;
+				public Input.Button Up;
+				public Input.Button NonA;
+				public Input.Button NonB;
+				public Input.Button SpellA;
+				public Input.Button SpellB;
+				public Input.Button Focus;
+				public Input.Button Bomb;
+				public Input.Button Taunt;
 			}
 		}
 	}	
