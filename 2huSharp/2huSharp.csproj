@@ -10,6 +10,7 @@
     <Compile Remove="Touhou.Graphics\Events.cs" />
     <Compile Remove="Touhou.IO\Controller.cs" />
     <Compile Remove="Touhou\TouhouSharp.cs" />
+    <Compile Remove="Unused\Controller.cs" />
     <Compile Remove="Unused\Delegates.cs" />
     <Compile Remove="Unused\Events.cs" />
     <Compile Remove="Unused\Input.cs" />
