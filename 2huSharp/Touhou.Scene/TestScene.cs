@@ -14,8 +14,13 @@ using Touhou.UI;
 namespace Touhou.Scene {
 	internal class TestScene : IScene {
 
+		private MenuSelector _baseMenuSelector;
+
 		public TestScene() {
-			_baseMenuSelector.Position = (Vector2f)Game.Window.Size / 2f;
+			_baseMenuSelector = new MenuSelector() {
+				Id = "Main",
+				Position = (Vector2f)Game.Window.Size / 2f
+			};
 
 			// define input events for base selector
 			_baseMenuSelector.OnInputPressed += (InputData inputData) => {
@@ -27,11 +32,11 @@ namespace Touhou.Scene {
 			};
 
 			_baseMenuSelector.OnInputPressed += (InputData inputData) => {
-				//if (inputData.Type != Input.Type.Joystick) return;
-				//switch (inputData.Direction) {
-				//	case Input.JoystickDirection.South: _baseMenuSelector.Index++; break;
-				//	case Input.JoystickDirection.North: _baseMenuSelector.Index--; break;
-				//}
+				if (inputData.Type != Input.Type.Joystick) return;
+				switch (inputData.Direction) {
+					case Input.JoystickDirection.South: _baseMenuSelector.Index++; break;
+					case Input.JoystickDirection.North: _baseMenuSelector.Index--; break;
+				}
 			};
 
 			// create all menus
@@ -63,10 +68,10 @@ namespace Touhou.Scene {
 
 				menuSelector.OnInputPressed += (InputData inputData) => {
 					if (inputData.Type != Input.Type.Joystick) return;
-					//switch (inputData.Direction) {
-					//	case Input.JoystickDirection.East: menuSelector.Index++; break;
-					//	case Input.JoystickDirection.West: menuSelector.Index--; break;
-					//}
+					switch (inputData.Direction) {
+						case Input.JoystickDirection.East: menuSelector.Index++; break;
+						case Input.JoystickDirection.West: menuSelector.Index--; break;
+					}
 				};
 
 				// define sub selector hover events
@@ -134,7 +139,7 @@ namespace Touhou.Scene {
 			_baseMenuSelector.InputReleased(inputData);
 		}
 
-		private MenuSelector _baseMenuSelector = new("main");
+		
 		private Player _player = new(400f, 400f);
 	}
 }

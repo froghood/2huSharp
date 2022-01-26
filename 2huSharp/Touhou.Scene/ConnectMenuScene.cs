@@ -13,11 +13,11 @@ using Touhou.IO;
 using Touhou.Extensions;
 
 namespace Touhou.Scene {
-	internal class HostMenuScene : IScene {
+	internal class ConnectMenuScene : IScene {
 
 		private MenuSelector _baseMenuSelector;
 
-		public HostMenuScene() {
+		public ConnectMenuScene() {
 			_baseMenuSelector = new MenuSelector() {
 				Id = "Main",
 				Position = (Vector2f)Game.Window.Size / 2f
@@ -37,7 +37,7 @@ namespace Touhou.Scene {
 				Id = "Address",
 				Position = new Vector2f(-10f, -20f),
 				InputPosition = new Vector2f(10f, -20f),
-				InputString = Game.Config.Network.DefaultHostAddress
+				InputString = Game.Config.Network.DefaultConnectAddress
 			};
 			_baseMenuSelector.AddMenu(menuInputAddress);
 
@@ -46,24 +46,24 @@ namespace Touhou.Scene {
 				Id = "Port",
 				Position = new Vector2f(-10f, 20f),
 				InputPosition = new Vector2f(10f, 20f),
-				InputString = Game.Config.Network.DefaultHostPort
+				InputString = Game.Config.Network.DefaultConnectPort
 			};
 			_baseMenuSelector.AddMenu(menuInputPort);
 
-			var menuOptionHost = new MenuOption() { Id = "Host", Position = new Vector2f(0f, 80f) };
-			_baseMenuSelector.AddMenu(menuOptionHost);
+			var menuOptionConnect = new MenuOption() { Id = "Connect", Position = new Vector2f(0f, 80f) };
+			_baseMenuSelector.AddMenu(menuOptionConnect);
 
 			var menuOptionBack = new MenuOption() { Id = "Back", Position = new Vector2f(0f, 120f) };
 			_baseMenuSelector.AddMenu(menuOptionBack);
 
 
 			// initial selector index
-			_baseMenuSelector.Index = _baseMenuSelector.GetIndexById("Host");
+			_baseMenuSelector.Index = _baseMenuSelector.GetIndexById("Connect");
 
 
 
-			menuOptionHost.OnInputPressed += (InputData inputData) => {
-				if (inputData.Action == Input.Action.NonA) Console.WriteLine(menuOptionHost.Id);
+			menuOptionConnect.OnInputPressed += (InputData inputData) => {
+				if (inputData.Action == Input.Action.NonA) Console.WriteLine(menuOptionConnect.Id);
 			};
 
 			menuOptionBack.OnInputPressed += (InputData inputData) => {
@@ -94,7 +94,7 @@ namespace Touhou.Scene {
 							menuInput.InputText.DisplayedString = menuInput.InputString;
 							menuInput.InputText.Align(Alignment.Left, Alignment.Center);
 							menuInput.Cursor.Position = menuInput.GetGlobalInputPosition() +
-								new Vector2f(menuInput.InputText.GetGlobalBounds().Width, 0f);                           
+								new Vector2f(menuInput.InputText.GetGlobalBounds().Width, 0f);
 							//Console.WriteLine(inputData.Key);
 							break;
 						case Input.Type.Key:
@@ -133,8 +133,8 @@ namespace Touhou.Scene {
 				};
 			}
 
-			menuInputAddress.OnTypingEnd += () => Game.Config.Network.DefaultHostAddress = menuInputAddress.InputString;
-			menuInputPort.OnTypingEnd += () => Game.Config.Network.DefaultHostPort = menuInputPort.InputString;
+			menuInputAddress.OnTypingEnd += () => Game.Config.Network.DefaultConnectAddress = menuInputAddress.InputString;
+			menuInputPort.OnTypingEnd += () => Game.Config.Network.DefaultConnectPort = menuInputPort.InputString;
 
 			foreach (var menuOption in _baseMenuSelector.GetMenus<MenuOption>()) {
 				menuOption.Text.Font = Game.FontManager.GetFont("redressed");
@@ -154,16 +154,7 @@ namespace Touhou.Scene {
 				};
 			}
 
-			//_baseMenuSelector.Index = _baseMenuSelector.GetIndexById("Host");
 			_baseMenuSelector.GetMenuByIndex().OnHover.Invoke();
-
-			
-
-			
-
-			
-
-			//_baseMenuSelector.GetMenuByIndex(0).OnHover.Invoke();
 
 		}
 
@@ -182,7 +173,5 @@ namespace Touhou.Scene {
 		public void InputReleased(InputData inputData) {
 			_baseMenuSelector.InputReleased(inputData);
 		}
-
-		
 	}
 }

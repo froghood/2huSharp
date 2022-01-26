@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Touhou.Scene\TestScene.cs" />
     <Compile Remove="Unused\Controller.cs" />
     <Compile Remove="Unused\Delegates.cs" />
     <Compile Remove="Unused\Events.cs" />
@@ -22,6 +23,7 @@
     <Content Include="bin\Debug\net5.0\assets\fonts\arial.ttf" />
     <Content Include="bin\Debug\net5.0\assets\fonts\HanaMinA.ttf" />
     <Content Include="bin\Debug\net5.0\assets\fonts\KoPubBatangMedium.ttf" />
+    <Content Include="bin\Debug\net5.0\assets\fonts\redressed.ttf" />
     <Content Include="bin\Debug\net5.0\assets\textures\Reimu.png" />
     <Content Include="bin\Debug\net5.0\assets\fonts\simsun.ttf" />
     <Content Include="bin\Debug\net5.0\assets\textures\Reimu.json" />

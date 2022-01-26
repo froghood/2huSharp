@@ -20,8 +20,7 @@ namespace Touhou {
 		public static GameWindow Window;
 		public static SceneManager SceneManager;
 		public static TextureManager TextureManager;
-		public static FontManager FontManager;
-		
+		public static FontManager FontManager;		
 		
 		private static Queue<Action> _commandBuffer = new();
 		private static Clock _clock = new();
@@ -44,6 +43,8 @@ namespace Touhou {
 				TextureManager.LoadTexture("Reimu");
 				FontManager.LoadFont("arial");
 				FontManager.LoadFont("HanaMinA");
+				FontManager.LoadFont("simsun");
+				FontManager.LoadFont("redressed");
 			}), new Action(() => {
 				SceneManager.PopScene();
 				SceneManager.PushScene<MainMenuScene>();
@@ -72,6 +73,11 @@ namespace Touhou {
 				prevTime = time;
 			}
 
+		}
+
+		public static void Close() {
+			Config.Save(@"config.json");
+			Window.Close();
 		}
 
 		public static void Command(Action action) {

@@ -17,6 +17,7 @@ namespace Touhou {
 	internal class Config {
 		public ConfigGraphics Graphics { get; set; }
 		public ConfigInput Input { get; set; }
+		public ConfigNetwork Network { get; set; }
 
 		public static Config Load(string path) {	
 
@@ -37,7 +38,7 @@ namespace Touhou {
 
 		public void Save(string path) {
 
-			var jsonText = JsonConvert.SerializeObject(this, Formatting.Indented);
+			var jsonText = JsonConvert.SerializeObject(this, Formatting.Indented, new StringEnumConverter());
 			File.WriteAllText(path, jsonText);
 
 			//var configProperties = typeof(Config).GetProperties(BindingFlags.Public | BindingFlags.Static);
@@ -88,6 +89,13 @@ namespace Touhou {
 				public Input.Button Bomb;
 				public Input.Button Taunt;
 			}
+		}
+
+		public class ConfigNetwork {
+			public string DefaultConnectAddress;
+			public string DefaultConnectPort;
+			public string DefaultHostAddress;
+			public string DefaultHostPort;
 		}
 	}	
 }

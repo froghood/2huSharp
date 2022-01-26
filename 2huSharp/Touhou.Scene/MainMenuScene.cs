@@ -15,8 +15,14 @@ using Touhou.Extensions;
 namespace Touhou.Scene {
 	internal class MainMenuScene : IScene {
 
+		private MenuSelector _baseMenuSelector;
+
 		public MainMenuScene() {
-			_baseMenuSelector.Position = (Vector2f)Game.Window.Size / 2f;
+
+			_baseMenuSelector = new MenuSelector() {
+				Id = "Main",
+				Position = (Vector2f)Game.Window.Size / 2f
+			};
 
 			// define input events for base selector
 			_baseMenuSelector.OnInputPressed += (InputData inputData) => {
@@ -24,6 +30,9 @@ namespace Touhou.Scene {
 				switch (inputData.Action) {
 					case Input.Action.Down: _baseMenuSelector.Index++; break;
 					case Input.Action.Up: _baseMenuSelector.Index--; break;
+				}
+				if (inputData.Action == Input.Action.NonB) {
+					_baseMenuSelector.Index = _baseMenuSelector.GetIndexById("Exit");
 				}
 			};
 
@@ -33,28 +42,50 @@ namespace Touhou.Scene {
 					case Input.JoystickDirection.South: _baseMenuSelector.Index++; break;
 					case Input.JoystickDirection.North: _baseMenuSelector.Index--; break;
 				}
+				if (inputData.Action == Input.Action.NonB) {
+					_baseMenuSelector.Index = _baseMenuSelector.GetIndexById("Exit");
+				}
 			};
 
 			// create all menus
-			var menuOptionConnect = _baseMenuSelector.AddMenu<MenuOption>("Connect", new Vector2f(0f, -20f));
-			var menuOptionHost = _baseMenuSelector.AddMenu<MenuOption>("Host", new Vector2f(0f, 20f));
-			var menuOptionExit = _baseMenuSelector.AddMenu<MenuOption>("Exit", new Vector2f(0f, 80f));
+
+			
+
+			var menuOptionConnect = new MenuOption() { Id = "Connect", Position = new Vector2f(0f, -20f) };
+			var menuOptionHost = new MenuOption() { Id = "Host", Position = new Vector2f(0f, 20f) };
+			var menuOptionExit = new MenuOption() { Id = "Exit", Position = new Vector2f(0f, 80f) };
 
 			// initial colors
-			menuOptionConnect.Text.FillColor = Color.White;
+			
 			menuOptionHost.Text.FillColor = new Color(160, 160, 160);
 			menuOptionExit.Text.FillColor = new Color(160, 160, 160);
 
+			_baseMenuSelector.AddMenu(menuOptionConnect);
+			_baseMenuSelector.AddMenu(menuOptionHost);
+			_baseMenuSelector.AddMenu(menuOptionExit);
+
+			menuOptionConnect.OnInputPressed += (inputData) => {
+				if (inputData.Action == Input.Action.NonA) {
+					Game.SceneManager.PushScene<ConnectMenuScene>();
+				}
+			};
+
+			menuOptionHost.OnInputPressed += (inputData) => {
+				if (inputData.Action == Input.Action.NonA) {
+					Game.SceneManager.PushScene<HostMenuScene>();
+				}
+			};
+
 			menuOptionExit.OnInputPressed += (inputData) => {
 				if (inputData.Action == Input.Action.NonA) {
-					Game.Window.Close();
+					Game.Close();
 				}
 			};
 
 			// loop through options
 			foreach (MenuOption menuOption in _baseMenuSelector.GetMenus()) {
 
-				menuOption.Text.Font = Game.FontManager.GetFont("HanaMinA");
+				menuOption.Text.Font = Game.FontManager.GetFont("redressed");
 				menuOption.Text.DisplayedString = menuOption.Id;			
 				menuOption.Text.Align(Alignment.Center, Alignment.Center);
 				menuOption.Text.Position = menuOption.GetGlobalPosition();
@@ -65,16 +96,25 @@ namespace Touhou.Scene {
 
 
 				// define sub menu hover events
-				menuOption.OnHover += () => { menuOption.Text.FillColor = Color.White; };
-				menuOption.OnHoverEnd += () => { menuOption.Text.FillColor = new Color(160, 160, 160); };
+				menuOption.OnHover += () => { 
+					menuOption.Text.FillColor = Color.White;
+					menuOption.Text.CharacterSize += 8;
+					menuOption.Text.Align(Alignment.Center, Alignment.Center);
+				};
+				menuOption.OnHoverEnd += () => { 
+					menuOption.Text.FillColor = new Color(160, 160, 160);
+					menuOption.Text.CharacterSize -= 8;
+					menuOption.Text.Align(Alignment.Center, Alignment.Center);
+				};
 
 				
 				
 
 			}
 
-			
-			
+			_baseMenuSelector.GetMenuByIndex(0).OnHover.Invoke();
+
+
 		}
 
 		public void Update(float time, float delta) {
@@ -96,7 +136,7 @@ namespace Touhou.Scene {
 			_baseMenuSelector.InputReleased(inputData);
 		}
 
-		private MenuSelector _baseMenuSelector = new("main");
+		
 		private Player _player = new(400f, 400f);
 	}
 }

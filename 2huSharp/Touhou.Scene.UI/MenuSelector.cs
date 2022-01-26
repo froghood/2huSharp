@@ -15,26 +15,40 @@ namespace Touhou.UI {
 
 		public int Index { get => _index;
 			set {
+				if (value == _index) return;
 				GetMenuByIndex().OnHoverEnd?.Invoke();
 				_index = (value + _menuList.Count) % _menuList.Count;
 				GetMenuByIndex().OnHover?.Invoke();
 			}
 		}
 
-		public MenuSelector() { }
+		private int _index = 0;
+		private List<Menu> _menuList = new();
+		private Dictionary<Type, List<Menu>> _menuDict = new();
 
-		public MenuSelector(string id, Vector2f positon = new Vector2f()) : base(null, id) {
-			Position = positon;
+		//public MenuSelector(string id, Vector2f positon = new Vector2f()) : base(null, id) {
+		//	Position = positon;
+		//}
+
+		//public MenuSelector(Menu parent, string id) : base(parent, id) {
+		//	Position = new();
+		//}
+
+		//public MenuSelector(Menu parent, string id, Vector2f positon = new Vector2f()) : base(parent, id) {
+		//	Position = positon;
+		//}
+
+		public void AddMenu<M>(M menu) where M : Menu {
+			Type type = typeof(M);
+
+			// create list for that type if it does not exist
+			if (!_menuDict.ContainsKey(type)) _menuDict[type] = new();
+
+			_menuDict[type].Add(menu);
+			_menuList.Add(menu);
+
+			menu.Parent = this;
 		}
-
-		public MenuSelector(Menu parent, string id) : base(parent, id) {
-			Position = new();
-		}
-
-		public MenuSelector(Menu parent, string id, Vector2f positon = new Vector2f()) : base(parent, id) {
-			Position = positon;
-		}
-
 
 		public M AddMenu<M>(string id, params object[] args) where M : Menu {
 			Type type = typeof(M);
@@ -96,10 +110,14 @@ namespace Touhou.UI {
 			return (menu == null);
 		}
 
+		public int GetIndexById(string id) {
+			for(int i = 0; i < _menuList.Count; i++) {
+				if (_menuList[i].Id == id) return i;
+			}
+			throw new ArgumentException($"No menu was found with the id {id}.");
+		}
 
 
-		private int _index = 0;
-		private List<Menu> _menuList = new();
-		private Dictionary<Type, List<Menu>> _menuDict = new();
+		
 	}
 }

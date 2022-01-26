@@ -23,6 +23,9 @@ namespace Touhou.IO {
 		private GamepadButtonFlags[] _prevButtons;
 		private Input.JoystickDirection[] _prevDirections;
 
+		private KeyEventArgs _keyEventCache;
+		private TextEventArgs _textEventCache;
+
 		const float JOYSTICK_MAX = 32767f;
 		const float DEADZONE = 0.25f;
 
@@ -36,15 +39,30 @@ namespace Touhou.IO {
 		}
 
 		public void Poll() {
+			_resetKeyPressedCache();
 			Game.Window.DispatchEvents();
+			_pollKeyboard();
 			_pollControllers();
 		}
 
+		private void _pollKeyboard() {
+			if (_keyEventCache == null && _textEventCache == null) return;
+
+			Game.SceneManager.ActiveScene.InputPressed(new InputData() {
+				Type = (IsTyping) ? Input.Type.Text : Input.Type.Key,
+				Key = _keyEventCache.Code,
+				Action = _getAction(_keyEventCache.Code),
+				Unicode = _textEventCache?.Unicode
+			}) ;
+
+		}
+
 		public void BindEvents(RenderWindow window) {
-			window.Closed += _closed;
-			window.KeyPressed += _keyPressed;
+			window.Closed += _closed;		
+			window.KeyPressed += _cacheKeyEvent;
 			window.KeyReleased += _keyReleased;
-			window.TextEntered += _textEntered;
+			window.TextEntered += _cacheTextEvent;
+
 
 			//window.KeyPressed += (_, e) => { Game.SceneManager.ActiveScene.InputPressed(new InputData(e.Code)); }; 
 			//window.KeyReleased += (_, e) => { Game.SceneManager.ActiveScene.InputReleased(new InputData(e.Code)); };
@@ -68,6 +86,19 @@ namespace Touhou.IO {
 			foreach (var t in _actionsByButton) {
 				Console.WriteLine(t);
 			}
+		}
+
+		public void BeginTyping() { Game.Command(() => { 
+				IsTyping = true;
+				Game.Window.SetKeyRepeatEnabled(true);
+			}); 
+		}
+
+		public void EndTyping() {
+			Game.Command(() => { 
+				IsTyping = false;
+				Game.Window.SetKeyRepeatEnabled(false);
+			}); 
 		}
 
 		private void _pollControllers() {
@@ -142,32 +173,37 @@ namespace Touhou.IO {
 		}
 
 		private void _closed(object sender, EventArgs e) {
-			Game.Window.Close();
+			Game.Close();
 		}
 
-		private void _keyPressed(object sender, KeyEventArgs args) {
-			Game.SceneManager.ActiveScene.InputPressed(new InputData() {
-				Type = Input.Type.Key,
-				Key = args.Code,
-				Action = _getAction(args.Code)
-			});
+		private void _cacheKeyEvent(object sender, KeyEventArgs args) {
+			//Console.WriteLine("keyPressed");
+			_keyEventCache = args;
+		}
+
+		private void _cacheTextEvent(object sender, TextEventArgs args) {
+			//Console.WriteLine("textEntered");
+
+			_textEventCache = args;
+
+			//Game.SceneManager.ActiveScene.InputPressed(new InputData() {
+			//	Type = (IsTyping) ? Input.Type.Text : Input.Type.Key,
+			//	Key = _keyEventArgs.Code,
+			//	Action = _getAction(_keyEventArgs.Code),
+			//	Unicode = args.Unicode
+			//});
 		}
 
 		private void _keyReleased(object sender, KeyEventArgs args) {
+			//Console.WriteLine("keyReleased");
 			Game.SceneManager.ActiveScene.InputReleased(new InputData() {
-				Type = Input.Type.Key,
+				Type = (IsTyping) ? Input.Type.Text : Input.Type.Key,
 				Key = args.Code,
 				Action = _getAction(args.Code)
 			});
 		}
 
-		private void _textEntered(object sender, TextEventArgs args) {
-			if (!IsTyping) return;
-			Game.SceneManager.ActiveScene.InputPressed(new InputData() {
-				Type = Input.Type.Text,
-				Unicode = args.Unicode,
-			});
-		}
+		
 
 		private Input.Action _getAction(Keyboard.Key key) {
 			if (!_actionsByKey.ContainsKey(key)) return Input.Action.Unknown;
@@ -177,6 +213,11 @@ namespace Touhou.IO {
 		private Input.Action _getAction(Input.Button button) {
 			if (!_actionsByButton.ContainsKey(button)) return Input.Action.Unknown;
 			return _actionsByButton[button];
+		}
+
+		private void _resetKeyPressedCache() {
+			_keyEventCache = null;
+			_textEventCache = null;
 		}
 
 

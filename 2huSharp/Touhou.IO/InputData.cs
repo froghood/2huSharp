@@ -11,9 +11,7 @@ using SharpDX.XInput;
 
 namespace Touhou.IO {
 
-	// TODO: finish input, gamepad data
-
-	internal readonly struct InputData {
+	internal class InputData {
 
 		public Input.Type Type { get; init; }
 		

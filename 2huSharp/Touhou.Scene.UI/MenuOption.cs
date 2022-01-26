@@ -18,8 +18,8 @@ namespace Touhou.UI {
 		public Text Text { get; set; } = new();
 		public Sprite Sprite { get; set; } = new();
 
-		public MenuOption(Menu parent, string id) : base(parent, id) { }
-		public MenuOption(Menu parent, string id, Vector2f position) : base(parent, id) { Position = position; }
+		//public MenuOption(Menu parent, string id) : base(parent, id) { }
+		//public MenuOption(Menu parent, string id, Vector2f position) : base(parent, id) { Position = position; }
 
 		public override void Update(float time, float delta) {
 			OnUpdate?.Invoke(time, delta);

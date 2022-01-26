@@ -13,13 +13,6 @@ using Touhou.IO;
 namespace Touhou.UI {
 	internal abstract class Menu : ISimulated, IInput {
 
-		public Menu() {}
-
-		public Menu(Menu parent, string id) {
-			Parent = parent;
-			Id = id;
-		}
-
 		public Menu Parent;
 		public string Id;
 
