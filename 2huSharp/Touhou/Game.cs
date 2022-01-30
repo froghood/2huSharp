@@ -10,6 +10,7 @@ using SFML.Window;
 using Touhou.IO;
 using Touhou.Graphics;
 using Touhou.Scene;
+using Touhou.Net;
 
 
 namespace Touhou {
@@ -20,7 +21,8 @@ namespace Touhou {
 		public static GameWindow Window;
 		public static SceneManager SceneManager;
 		public static TextureManager TextureManager;
-		public static FontManager FontManager;		
+		public static FontManager FontManager;
+		public static Network Network;
 		
 		private static Queue<Action> _commandBuffer = new();
 		private static Clock _clock = new();
@@ -38,6 +40,8 @@ namespace Touhou {
 			FontManager = new FontManager(@"assets\fonts");
 
 			SceneManager = new SceneManager();
+
+			Network = new Network();
 
 			SceneManager.PushScene<LoadingScene>(new Action(() => {
 				TextureManager.LoadTexture("Reimu");

@@ -1,5 +1,5 @@
 ﻿
-namespace Touhou {
+namespace Touhou.Net {
 	public interface IOnline {
 
 	}

@@ -1,21 +1,30 @@
 ﻿using System;
+using System.Threading;
 
 namespace Testing {
 	class Program {
 		static void Main(string[] args) {
-			A testA = new() { foo = 5 };
-			ref A testB = ref testA;
+			A a = new A();
+			Console.WriteLine(a.Foo);
 
-			testA = new() { foo = 8 };
-			testA = new() { foo = 20 };
-
-			Console.WriteLine(testB.foo);
-
-			while (true) ;
+			Thread.Sleep(5000);
 		}
 	}
 
-	class A {
-		public int foo;
+	public class A {
+
+		public int Foo { get => b.Foo; set => b.Foo = value; }
+
+		private B b;
+
+		
+
+		public A() {
+			b = new B() { Foo = 5 };
+		}
+
+		private class B {
+			public int Foo;
+		}
 	}
 }

@@ -63,7 +63,9 @@ namespace Touhou.Scene {
 
 
 			menuOptionConnect.OnInputPressed += (InputData inputData) => {
-				if (inputData.Action == Input.Action.NonA) Console.WriteLine(menuOptionConnect.Id);
+				if (inputData.Action == Input.Action.NonA) {
+					Game.SceneManager.PushScene<ConnectingScene>(menuInputAddress.InputString, menuInputPort.InputString);
+				}
 			};
 
 			menuOptionBack.OnInputPressed += (InputData inputData) => {
@@ -76,32 +78,29 @@ namespace Touhou.Scene {
 				menuInput.Text.Font = Game.FontManager.GetFont("redressed");
 				menuInput.Text.FillColor = new Color(160, 160, 160);
 				menuInput.Text.DisplayedString = menuInput.Id;
-				menuInput.Text.Align(Alignment.Right, Alignment.Center);
+				menuInput.Text.Origin = new Vector2f(menuInput.Text.GetLocalBounds().Width, menuInput.Text.CharacterSize * 0.75f);
 				menuInput.Text.Position = menuInput.GetGlobalPosition();
 				menuInput.InputText.Font = Game.FontManager.GetFont("redressed");
 				menuInput.InputText.FillColor = new Color(160, 160, 160);
-				menuInput.InputText.DisplayedString = menuInput.InputString;
-				menuInput.InputText.Align(Alignment.Left, Alignment.Center);
+				menuInput.InputText.Origin = new Vector2f(0f, menuInput.InputText.CharacterSize * 0.75f);
 				menuInput.InputText.Position = menuInput.GetGlobalInputPosition();
-				menuInput.Cursor.Size = new Vector2f(2f, 40f);
-				menuInput.Cursor.FillColor = Color.White;
-				menuInput.Cursor.Align(Alignment.Left, Alignment.Center);
+				menuInput.Cursor.Size = new Vector2f(2f, menuInput.InputText.CharacterSize * 1.5f);
+				menuInput.Cursor.Origin = menuInput.InputText.Origin * 1.2f;
+				menuInput.Cursor.Color = Color.White;
 
 				menuInput.OnInputPressed += (InputData inputData) => {
 					switch (inputData.Type) {
 						case Input.Type.Text:
 							menuInput.Input(inputData.Unicode);
-							menuInput.InputText.DisplayedString = menuInput.InputString;
-							menuInput.InputText.Align(Alignment.Left, Alignment.Center);
-							menuInput.Cursor.Position = menuInput.GetGlobalInputPosition() +
-								new Vector2f(menuInput.InputText.GetGlobalBounds().Width, 0f);
-							//Console.WriteLine(inputData.Key);
+							menuInput.Cursor.Index +=
+								(inputData.Action == Input.Action.Right).Int() -
+								(inputData.Action == Input.Action.Left).Int();
 							break;
 						case Input.Type.Key:
-							if (inputData.Action == Input.Action.NonA) menuInput.BeginTyping();
-							menuInput.Cursor.Position = menuInput.GetGlobalInputPosition() +
-								new Vector2f(menuInput.InputText.GetGlobalBounds().Width, 0f);
-
+							if (inputData.Action == Input.Action.NonA) {
+								menuInput.BeginTyping();
+								menuInput.Cursor.Index = menuInput.InputString.Length;
+							}
 							break;
 					}
 				};
@@ -109,27 +108,27 @@ namespace Touhou.Scene {
 				menuInput.OnHover += () => {
 					menuInput.Text.FillColor = Color.White;
 					menuInput.Text.CharacterSize += 8;
-					menuInput.Text.Align(Alignment.Right, Alignment.Center);
+					menuInput.Text.Origin = new Vector2f(menuInput.Text.GetLocalBounds().Width, menuInput.Text.CharacterSize * 0.75f);
 				};
 
 				menuInput.OnHoverEnd += () => {
 					menuInput.Text.FillColor = new Color(160, 160, 160);
 					menuInput.Text.CharacterSize -= 8;
-					menuInput.Text.Align(Alignment.Right, Alignment.Center);
+					menuInput.Text.Origin = new Vector2f(menuInput.Text.GetLocalBounds().Width, menuInput.Text.CharacterSize * 0.75f);
 				};
 
 				menuInput.OnTypingBegin += () => {
 					menuInput.OnHoverEnd.Invoke();
 					menuInput.InputText.FillColor = Color.White;
 					menuInput.InputText.CharacterSize += 8;
-					menuInput.InputText.Align(Alignment.Left, Alignment.Center);
+					menuInput.InputText.Origin = new Vector2f(0f, menuInput.InputText.CharacterSize * 0.75f);
 				};
 
 				menuInput.OnTypingEnd += () => {
 					menuInput.OnHover.Invoke();
 					menuInput.InputText.FillColor = new Color(160, 160, 160);
 					menuInput.InputText.CharacterSize -= 8;
-					menuInput.InputText.Align(Alignment.Left, Alignment.Center);
+					menuInput.InputText.Origin = new Vector2f(0f, menuInput.InputText.CharacterSize * 0.75f);
 				};
 			}
 
@@ -140,17 +139,19 @@ namespace Touhou.Scene {
 				menuOption.Text.Font = Game.FontManager.GetFont("redressed");
 				menuOption.Text.FillColor = new Color(160, 160, 160);
 				menuOption.Text.DisplayedString = menuOption.Id;
-				menuOption.Text.Align(Alignment.Center, Alignment.Center);
+				menuOption.Text.Origin = new Vector2f(menuOption.Text.GetLocalBounds().Width / 2, menuOption.Text.CharacterSize * 0.75f);
 				menuOption.Text.Position = menuOption.GetGlobalPosition();
-				menuOption.OnHover += () => { 
+
+				menuOption.OnHover += () => {
 					menuOption.Text.FillColor = Color.White;
 					menuOption.Text.CharacterSize += 8;
-					menuOption.Text.Align(Alignment.Center, Alignment.Center);
+					menuOption.Text.Origin = new Vector2f(menuOption.Text.GetLocalBounds().Width / 2, menuOption.Text.CharacterSize * 0.75f);
 				};
-				menuOption.OnHoverEnd += () => { 
+
+				menuOption.OnHoverEnd += () => {
 					menuOption.Text.FillColor = new Color(160, 160, 160);
 					menuOption.Text.CharacterSize -= 8;
-					menuOption.Text.Align(Alignment.Center, Alignment.Center);
+					menuOption.Text.Origin = new Vector2f(menuOption.Text.GetLocalBounds().Width / 2, menuOption.Text.CharacterSize * 0.75f);
 				};
 			}
 

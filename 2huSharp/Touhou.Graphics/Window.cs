@@ -13,7 +13,7 @@ using Touhou.Graphics;
 namespace Touhou.Graphics {
 	class GameWindow : RenderWindow {
 
-		public Color ClearColor;
+		public Color ClearColor { get; set; }
 
 		private Layers _layers = new(16);
 
@@ -29,6 +29,10 @@ namespace Touhou.Graphics {
 
 		public new void Clear() {
 			base.Clear(ClearColor);
+		}
+
+		public Vector2f GetCenter() {
+			return (Vector2f)Size / 2f;
 		}
 
 		public override void Display() {
